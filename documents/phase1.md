@@ -205,3 +205,110 @@ module.exports = {
     "start": "./node_modules/.bin/webpack-dev-server --open --progress --colors --config webpack.dev.js",
     "build": "./node_modules/.bin/webpack --config webpack.prod.js"
 
+####9. 安装react-router-dom，添加react路由
+    yarn add react-router-dom
+
+index.jsx
+```javascript
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+import Home from "./pages/Home";
+
+ReactDOM.render(
+    <BrowserRouter>
+        <Switch>
+            <Route path={'/'} component={Home}></Route>
+        </Switch>
+    </BrowserRouter>,
+    document.getElementById('root')
+);
+```
+
+####10. 引入antd，并添加less-loader用以加载antd的样式
+    yarn add antd
+    yarn add less less-loader css-loader stlye-loader postcss-loader -D
+    
+到这里我们可以发现如果我们修改了webpack的某些配置后，需要修改两份代码，很不便利，因此我们可以将dev/prod共有的逻辑抽成common，得以复用。
+webpack.common.js
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    // 指定项目的入口文件
+    entry: {
+        index: ['./src/index.jsx']
+    },
+    // 指定项目打包完成后的出口目录及文件名
+    output: {
+        path: `${__dirname}/dist`,
+        filename: "bundle.js"
+    },
+    // 配置省略后缀
+    resolve: {
+        extensions: ['.js', '.jsx', '.css', '.json'],
+    },
+    module: {
+        rules: [
+            // 配置babel-loader
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
+                    }
+                }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: 'style-loader',
+                        options: {
+                            singleton: true,// 单独的style
+                        }
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'postcss-loader'
+                    }
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            lessOptions: {
+                                javascriptEnabled: true
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    plugins: [
+        // 将我们打包好的js代码动态的插入到html中
+        new HtmlWebpackPlugin({
+            title: 'learn ',
+            template: './index.html',
+            filename: 'index.html',
+            inject: true,
+            hash: true,
+            chunksSortMode: 'none'
+        }),
+    ],
+}
+``` 
