@@ -1,14 +1,15 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {BrowserRouter, Switch, Route} from "react-router-dom";
-import Home from "./pages/Home";
+import App from "./pages/App";
 import './index.less';
+import {Switch, BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
     <BrowserRouter>
         <Switch>
-            <Route path={'/'} component={Home}></Route>
+            <App />
         </Switch>
-    </BrowserRouter>,
+    </BrowserRouter>
+    ,
     document.getElementById('root')
 );
