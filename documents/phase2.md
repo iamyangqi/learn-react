@@ -1,5 +1,5 @@
 # React项目实战
-####1. 开始第一个组件Login
+#### 1. 开始第一个组件Login
 因为login中会设计到页面的跳转，我们需要用react-router中的withRouter方法，该方法为我们的组件注入了history/location的信息，方便我们实现路由跳转及获取路由信息。
     
     yarn add react-router
@@ -49,7 +49,7 @@ Login 主要实现用户名/密码的输入及校验，校验失败给出相应�
 
 到这里我们差不多就把一个react项目的主要内容走了一遍。但这不够，，，
 
-####2. 改写index.jsx，将逻辑移到App.jsx中，并实现一个全局的context，用以保存全局的一些状态, 并且借助useReducer hook来实现响应式数据。
+#### 2. 改写index.jsx，将逻辑移到App.jsx中，并实现一个全局的context，用以保存全局的一些状态, 并且借助useReducer hook来实现响应式数据。
 
 首先创建一个context
 App/context.jsx

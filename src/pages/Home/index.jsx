@@ -1,18 +1,22 @@
 import * as React from 'react';
 import Layout from "antd/es/layout";
 import 'antd/es/layout/style';
-import ScopeContext from "../App/context";
+import ScopeContext from "../../Containers/App/context";
 import {message} from "antd";
+import useDate from "../../hooks/useDate";
+import './index.less';
+import Popconfirm from "antd/es/popconfirm";
+import "antd/es/popconfirm/style";
+import {withRouter} from "react-router";
+import Menu from "antd/es/menu";
+import "antd/es/menu/style";
+import HomeRoute from "../../Containers/HomeRoute";
 const { Header, Footer, Sider, Content } = Layout;
 
-function Home() {
+const Home = withRouter((props) => {
     const scope = React.useContext(ScopeContext);
-
-    React.useEffect(() => {
-        scope.state.loginInfo
-        && scope.state.loginInfo.username
-        && message.success(`${scope.state.loginInfo && scope.state.loginInfo.username}， 欢迎回来！`)
-    }, [scope.state.loginInfo && scope.state.loginInfo.username]);
+    const [siderSelectedKeys, setSiderSelectedKeys] = React.useState(['']);
+    const currentTime = useDate();
 
     // 卸载时，清除message相关内容
     React.useEffect(() => {
@@ -27,16 +31,67 @@ function Home() {
         }
     }, []);
 
+    function onLogout() {
+        scope.dispatch({
+            type:'setLoginInfo',
+            loginInfo: null
+        });
+        localStorage.clear();
+        props.history.replace('/login');
+    }
+
+    const systemMenu = React.useMemo(() => {
+        if (scope.state.loginInfo && scope.state.loginInfo.username) {
+            message.success(`${scope.state.loginInfo && scope.state.loginInfo.username}， 欢迎回来！`);
+            return (
+                <Popconfirm
+                    title={`确定退出账号【${scope.state.loginInfo && scope.state.loginInfo.username}】吗?`}
+                    onConfirm={onLogout}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <span style={{paddingLeft: '30px', cursor: 'pointer'}}>
+                        {scope.state.loginInfo && scope.state.loginInfo.username}
+                    </span>
+                </Popconfirm>
+            );
+        } else {
+            return null;
+        }
+    }, [scope.state.loginInfo && scope.state.loginInfo.username]);
+
+    function handleSiderClick(e) {
+        setSiderSelectedKeys(e.key);
+        props.history.push(e.key);
+    }
+
     return (
-        <Layout>
-            <Sider>Sider</Sider>
+        <Layout id='home'>
+            <Header className='home-header'>
+                <div className='sth'></div>
+                <div className='system-info'>
+                    <span>{currentTime}</span>
+                    {systemMenu}
+                </div>
+            </Header>
             <Layout>
-                <Header>Header</Header>
-                <Content>Content</Content>
-                <Footer>Footer</Footer>
+                <Sider>
+                    <Menu
+                        onClick={handleSiderClick}
+                        style={{ width: '100%' }}
+                        selectedKeys={siderSelectedKeys}
+                        mode="inline"
+                        theme="dark"
+                    >
+                        <Menu.Item key="user-management">用户管理</Menu.Item>
+                    </Menu>
+                </Sider>
+                <Content>
+                    <HomeRoute />
+                </Content>
             </Layout>
         </Layout>
     )
-}
+});
 
 export default Home;

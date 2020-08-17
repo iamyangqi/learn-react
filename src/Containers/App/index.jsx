@@ -1,8 +1,8 @@
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {withRouter} from 'react-router';
 import * as React from 'react';
-import Login from "../Login";
-import Home from "../Home";
+import Login from "../../pages/Login";
+import Home from "../../pages/Home";
 import ScopeContext from "./context";
 
 const App = withRouter((props) => {

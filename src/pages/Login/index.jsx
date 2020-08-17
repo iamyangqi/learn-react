@@ -11,7 +11,7 @@ import {Button} from 'antd';
 import 'antd/es/button/style';
 import {message} from 'antd';
 import 'antd/es/message/style';
-import ScopeContext from "../App/context";
+import ScopeContext from "../../Containers/App/context";
 
 const Login = withRouter((props) => {
     const layout = {
