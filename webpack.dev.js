@@ -14,6 +14,14 @@ module.exports = merge.merge(commonOptions, {
         hot: true,   // 开启热更新
         inline: true,
         historyApiFallback: true,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:5000',
+                pathRewrite: {
+                    "^/api": ""
+                }
+            }
+        }
     },
     plugins: [
         // 热更新的插件

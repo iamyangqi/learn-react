@@ -12,6 +12,7 @@ import 'antd/es/button/style';
 import {message} from 'antd';
 import 'antd/es/message/style';
 import ScopeContext from "../../Containers/App/context";
+import uMApis from "../../apis/userManagementApis";
 
 const Login = withRouter((props) => {
     const layout = {
@@ -24,20 +25,21 @@ const Login = withRouter((props) => {
     const [form] = Form.useForm();
     const scope = React.useContext(ScopeContext);
 
-    function onFinish(values) {
+    async function onFinish(values) {
         const {username, password, remember} = values;
-        if (username === 'admin' && password === 'admin') {
+        const res = await uMApis.login(username, password);
+        if (res.status === 0) {
             props.history.push('/');
-            scope.dispatch({
-                type:'setLoginInfo',
-                loginInfo: {
-                    username: 'admin'
-                }
-            });
+                scope.dispatch({
+                    type:'setLoginInfo',
+                    loginInfo: {
+                        username: res.data.username
+                    }
+                });
 
-            if (remember) {
-                localStorage.setItem('loginSession', 'sjdfdskla;fjis;fjsdklfafdiroajka;fdafsdf');
-            }
+                if (remember) {
+                    localStorage.setItem('loginSession', 'sjdfdskla;fjis;fjsdklfafdiroajka;fdafsdf');
+                }
         } else {
             message.error('请输入正确的用户名和密码！');
         }

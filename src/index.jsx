@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import App from "./Containers/App";
 import './index.less';
 import {Switch, BrowserRouter} from "react-router-dom";
-require('../mock/index');
+// require('../mock/index');
 
 ReactDOM.render(
     <BrowserRouter>

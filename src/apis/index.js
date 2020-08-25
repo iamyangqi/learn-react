@@ -5,4 +5,9 @@ const _axios = axios.create({
     paramsSerializer: (params) => qs.stringify(params, {arrayFormat: 'repeat'}),
 });
 
-export default _axios;
+const _apiAxios = axios.create({
+    baseURL: '/',
+    paramsSerializer: (params) => qs.stringify(params, {arrayFormat: 'repeat'}),
+});
+
+export {_axios, _apiAxios};

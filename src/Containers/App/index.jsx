@@ -36,8 +36,8 @@ const App = withRouter((props) => {
             dispatch
         }}>
             <Switch>
-                <Route path={'/login'} component={Login}></Route>
-                <Route path={'/'} component={Home}></Route>
+                <Route path={'/login'} exact={true} component={Login}></Route>
+                <Route path={'/'} exact={true} component={Home}></Route>
             </Switch>
         </ScopeContext.Provider>
     );
