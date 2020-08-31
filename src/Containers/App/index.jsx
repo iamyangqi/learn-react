@@ -37,7 +37,7 @@ const App = withRouter((props) => {
         }}>
             <Switch>
                 <Route path={'/login'} exact={true} component={Login}></Route>
-                <Route path={'/'} exact={true} component={Home}></Route>
+                <Route path={'/'} component={Home}></Route>
             </Switch>
         </ScopeContext.Provider>
     );

@@ -13,8 +13,10 @@ import {message} from 'antd';
 import 'antd/es/message/style';
 import ScopeContext from "../../Containers/App/context";
 import uMApis from "../../apis/userManagementApis";
+import {useTranslation} from "react-i18next";
 
 const Login = withRouter((props) => {
+    const {t, i18n} = useTranslation();
     const layout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
@@ -27,22 +29,34 @@ const Login = withRouter((props) => {
 
     async function onFinish(values) {
         const {username, password, remember} = values;
-        const res = await uMApis.login(username, password);
-        if (res.status === 0) {
+        // const res = await uMApis.login(username, password);
+        if (username === 'admin' && password === 'admin') {
             props.history.push('/');
-                scope.dispatch({
-                    type:'setLoginInfo',
-                    loginInfo: {
-                        username: res.data.username
-                    }
-                });
-
-                if (remember) {
-                    localStorage.setItem('loginSession', 'sjdfdskla;fjis;fjsdklfafdiroajka;fdafsdf');
+            scope.dispatch({
+                type:'setLoginInfo',
+                loginInfo: {
+                    username: 'admin'
                 }
-        } else {
-            message.error('请输入正确的用户名和密码！');
+            });
+            if (remember) {
+                localStorage.setItem('loginSession', 'sjdfdskla;fjis;fjsdklfafdiroajka;fdafsdf');
+            }
         }
+        // if (res.status === 0) {
+        //     props.history.push('/');
+        //     scope.dispatch({
+        //         type:'setLoginInfo',
+        //         loginInfo: {
+        //             username: res.data.username
+        //         }
+        //     });
+        //
+        //     if (remember) {
+        //         localStorage.setItem('loginSession', 'sjdfdskla;fjis;fjsdklfafdiroajka;fdafsdf');
+        //     }
+        // } else {
+        //     message.error('请输入正确的用户名和密码！');
+        // }
     }
 
     function onReset() {
@@ -52,7 +66,7 @@ const Login = withRouter((props) => {
     return (
         <div className='login-bg'>
             <div className='login'>
-                <h1>登录</h1>
+                <h1>{t('common:Login')}</h1>
                 <Form
                     {...layout}
                     form={form}

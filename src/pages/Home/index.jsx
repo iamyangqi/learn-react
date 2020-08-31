@@ -12,9 +12,11 @@ import Menu from "antd/es/menu";
 import "antd/es/menu/style";
 import HomeRoute from "../../Containers/HomeRoute";
 const { Header, Footer, Sider, Content } = Layout;
+import {useTranslation} from "react-i18next";
 
 const Home = withRouter((props) => {
     const scope = React.useContext(ScopeContext);
+    const {t, i18n} = useTranslation();
     const [siderSelectedKeys, setSiderSelectedKeys] = React.useState(['']);
     const currentTime = useDate();
 
@@ -65,12 +67,19 @@ const Home = withRouter((props) => {
         props.history.push(e.key);
     }
 
+    const changeLng = React.useCallback(() => {
+        let lng = i18n.language;
+        lng = lng === 'zh' ? 'en' : 'zh';
+        i18n.changeLanguage(lng);
+    }, []);
+
     return (
         <Layout id='home'>
             <Header className='home-header'>
                 <div className='sth'></div>
                 <div className='system-info'>
                     <span>{currentTime}</span>
+                    <span onClick={changeLng}>{t('home:Change Lng')}：{i18n.language}</span>
                     {systemMenu}
                 </div>
             </Header>
@@ -83,7 +92,7 @@ const Home = withRouter((props) => {
                         mode="inline"
                         theme="dark"
                     >
-                        <Menu.Item key="user-management">用户管理</Menu.Item>
+                        <Menu.Item key="user-management">{t('home:UserManagement')}</Menu.Item>
                     </Menu>
                 </Sider>
                 <Content>
